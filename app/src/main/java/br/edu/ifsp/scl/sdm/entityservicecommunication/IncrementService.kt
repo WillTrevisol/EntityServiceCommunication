@@ -13,8 +13,11 @@ class IncrementService : Service() {
     private inner class IncrementHandler(looper: Looper): Handler(looper) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
-            msg.data.getInt("VALUE").also {
-                InterEntityCommunication.valueLiveData.postValue(it + 1)
+            msg.data.getInt("VALUE").also { value ->
+                Intent("INCREMENT_VALUE_ACTION").apply {
+                    putExtra("VALUE", value + 1)
+                    sendBroadcast(this)
+                }
             }
             stopSelf()
         }
